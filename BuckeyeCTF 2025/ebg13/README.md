@@ -4,13 +4,13 @@
 First let's take a look at the webpage.
 ![Overview of the webpage](images/first_pic.png)
 
-I try one of the feature presented on the page: `example.com` and it returns this
-![Result of example.com](images/recon_feature.png).
+I try one of the features presented on the page: `example.com` and it returns this
+![Result of example.com](images/recon_feature.png)
 
 It seems that the contents is encoded by rot13. Let's decode it using [online tool](https://cryptii.com/pipes/rot13-decoder) and paste the text in.
 
 ![Decoded text](images/rot13decode.png)
-The result confirms that the website gets the url from user input and encode it via rot13 algo before returns the contents. At this moment, i think there may be SSRF here. Now, let's inspect the source code.
+The result confirms that the website gets the url from user input and encodes it via rot13 algo before returns the contents. At this moment, i think there may be SSRF here. Now, let's inspect the source code.
 
 ```javascript
 fastify.get('/admin', async (req, reply) => {
