@@ -28,7 +28,7 @@ The repsonse is
 ![The server declines to return the flag](images/accessAdminFromExternal.png)
 It means `Hello 10.0.1.44, I won't give you the flag!`
 
-I see the IP address 10.0.1.44 (declinded) and the if-block which checks for IP address and reckon that I have to be at the same network with the server to access the /admin page. 
+I see the IP address 10.0.1.44 (declined) and the if-block which checks for IP address and reckon that I have to be at the same network with the server to access the /admin page. 
 
 Notice that the server is listening from all interfaces on port 3000
 
