@@ -6,7 +6,7 @@
 ## Overview
 - **Platform**: TryHackMe
 - **Category**: Web
-- **Difficulty**: Easy-Medium (2/5 subjective)
+- **Difficulty**: Easy-Medium (subjective)
 - **Goal**: Login into moderator and admin panel via XSS and Session Hijacking
 
 ## Analysis and Exploration
@@ -93,4 +93,4 @@ Replace the **PHPSESSID** into the same page and we got *Admin* panel, hence the
 
 ![Admin panel](assets/flag2.png)
 
-> **Easter Egg**: Even you get *admin* session, you still can't change the password or use admin's priviledge.
+> **Easter Egg**: Even you get *admin* session, you still can't change the password or use admin's privilege.
