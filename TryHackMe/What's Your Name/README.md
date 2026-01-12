@@ -1,5 +1,6 @@
-# [What's Your Name](https://tryhackme.com/room/whatsyourname)
+# What's Your Name
 > Personal writeup for learning purposes.
+> Link to the challenge: https://tryhackme.com/room/whatsyourname
 
 ---
 
