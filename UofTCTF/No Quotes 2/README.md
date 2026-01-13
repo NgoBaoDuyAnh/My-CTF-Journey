@@ -124,7 +124,7 @@ For SSTI payload, I have discovered 2 approaches:
 - Using `request` lib to get value from ***headers or args or cookies*** without using quotes
 ```{{url_for.__globals__.os.popen(request.cookies.hack).read()}}``` (remember to replace `cookies` with your desired method)
 
-You can choose one of three methods for this approaches (I recommend using `cookies` since challenge uses https, I can't use BurpSuite for this site, the other 2 methods work when I deploy on my container, which use http protocol), after sending post form and getting redirect to `/home`, you can do as follow:
+You can choose one of three methods for these approaches (I recommend using `cookies` since challenge uses https, I can't use BurpSuite for this site, the other 2 methods work when I deploy on my container, which uses http protocol), after sending post form and getting redirect to `/home`, you can do as follow:
 - If **headers**: Use BurpSuite to capture request to `/home` and insert header: `hack: /readflag`
 ![headers](assets/headers.png)
 - If **args**:  Use BurpSuite to capture request to `/home` and add query in URI: ?hack=/readflag
