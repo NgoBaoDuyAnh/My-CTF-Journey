@@ -56,6 +56,7 @@ which is then hex encoded (hex encode can bypass waf)<br> **0x7b7b73656c662e5f5f
 
 At this moment, ***render_template_string*** parses and spots double curly brackets `{{   }}`, execute code inside the brackets, get result and inserted into HTML template, return to user
 
+Also remember to append comment at the end of the payload in order for the query works properly
 ## Final Payload
 
 - username: `\`
