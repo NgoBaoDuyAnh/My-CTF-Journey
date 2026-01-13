@@ -19,15 +19,16 @@ Menu:<br>
 - SameSite: Lax => CRSF via GET request
 - HttpOnly: false => XSS reads cookie
 - Server creates new session id after login and access url via *magic link*<br>
+```
 Endpoints:
-    - /dashboard        only display savedCotent (sanitize server-side) => can't XSS at dashboard => skip
+    - /dashboard        tonly display savedCotent (sanitize server-side) => can't XSS at dashboard => skip
     - /post/:id         only display savedCotent (sanitize server-side) => can't XSS at post/:id => skip
     - /report           allow sending link to internal endpoint, pow_challenge and pow_solution
     - /edit (GET)<br>
         -- /edit<br>
         -- /edit/new        
 
-        -- /edit/:id    this page has autosave functionality which sanitizes draft content on client-side and sends **SAVE** request to **api/autosave** for each 30 seconds
+        -- /edit/:id    this page has autosave functionality which sanitizes draft content on client-side and sends **SAVE** request to **/api/autosave** for each 30 seconds
 
     - /api<br>
         -- /api/save        (DOMpurify = sanitize server-side => skip)<br>
@@ -37,11 +38,12 @@ Endpoints:
         -- /magic/generate (POST)<br>
         -- /magic/:token   (GET)    receives one query *redirect*, user-controlled *redirect* value <br>
     - /flag (Admin only)
+```
 ## Analysis
 
 - Since only admin can read the flag (server check session id) => We want to steal admin's cookie
 - Endpoint **/edit/:id** is vulnerable to XSS => trick admin to access this page
-- **/magic/:token** allows redirection to same hot endpoints, create new session id as accessing the link. **However it stores previous cookie as *sid_prev* without discard it????** => Admin clicks link and admin's cookie is reserved.
+- **/magic/:token** allows redirection to same hot endpoints, create new session id as accessing the link. **However it stores previous cookie as *sid_prev* without discard it????** => Admin clicks link and admin's cookie is still kept on browserbrowser.
 - Endpoint **/report** allows users to post challenge and solution => users control both of them
 
 ## Attack Flow
