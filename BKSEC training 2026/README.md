@@ -17,7 +17,7 @@ I'll create a valid account and login. Let the traffic go through Burp Suite
 
 ![register page](assets/register.png)
 
-- `/signup-check.php`: server checks if the username already exists in its database. If yes returns error, prompt user to register other name. If yes, redirect to `/signup.php` with successfully prompt
+- `/signup-check.php`: server checks if the username already exists in its database. If no returns error, prompt user to register other name. If yes, redirect to `/signup.php` with successfully prompt
 
 ![signup-check](assets/signup-check.png)
 
@@ -27,7 +27,7 @@ I'll create a valid account and login. Let the traffic go through Burp Suite
 
 ![login page](assets/login_page.png)
 
-- `/login-check.php`: server verifies the credentials and redirect to `/home.php`
+- `/login-check.php`: server verifies the credentials and redirect to `/home.php` if match
 
 ![login-check](assets/logincheck.png)
 
