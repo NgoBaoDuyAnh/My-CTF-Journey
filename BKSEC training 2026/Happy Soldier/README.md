@@ -131,7 +131,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'fight') {
 The code has a magic method `__wakeup()` which is immediately called when php unserialized an object.
 In this code block, it compares neccessary attributes of the object to determine whether the user wins or not. In other cases, if inside `__wakeup()` has function `file_get_contents()`, `readfile()`, `include()` or `require()`,... , if not handled properly, attackers can abuse the method to read arbitrary files on the server.
 
-
+### Root cause:
+Because the server doesn't validate the validity of user's cookie (object) and use magic method `__wakeup()`
 ## Exploitation
 Modify the object such that it satisfies the 2 conditions: 
 - `attack` =  99999999999999999

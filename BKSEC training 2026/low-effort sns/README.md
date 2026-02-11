@@ -54,6 +54,8 @@ I try injecting quotes and comment and server logs me in, also set a the **PHPSE
 
 That means server contatenates user-controlled input directly to the SQL query without or weak filter. 
 
+### Root cause:
+Developers code carelessly, in which they contatenates user-controlled input directly to the SQL query without filter. They also don't use measure such as: `prepared statements`. Therefore, attacker can inject payload and read the whole system content.
 ## Exploit
 
 Recon to figure out how many columns the query need with:

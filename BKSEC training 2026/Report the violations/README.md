@@ -63,6 +63,9 @@ For value is 2 and whatever value, even I delete the value and let it be `source
 
 - **Vul 2**: Server doesn't filter `name` from users but inserts directly into the page and returns it to users. Attacker can abuse XSS to steal cookie admin when admin visit the page with XSS payload presented at the comment part.
 
+### Root cause:
+The server doesn't filter entirely user's content, which spares attack vector for attackers to insert XSS payload into the comment name, results in ***Stored XSS***. Attackers can inject malicious to the comment and steal credentials from web-visitors.
+
 ## Exploitation
 
 I send the same payload as above with little modification to include admin's cookie when the admin visit the page:
