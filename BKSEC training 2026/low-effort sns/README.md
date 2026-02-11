@@ -1,4 +1,4 @@
-## Writeup: low-effort sns (BKSEC training 2026)
+# Writeup: low-effort sns (BKSEC training 2026)
 ---
 
 ## Overview
