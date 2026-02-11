@@ -2,7 +2,6 @@
 ---
 
 ## Overview
-- `/`:
 
 The page shows us a console with player card including: `health`, `attack`, `coins` and `weapon`; together with moster card.
 
@@ -11,6 +10,8 @@ The page shows us a console with player card including: `health`, `attack`, `coi
 ![dashboard](assets/dashboard.png)
 
 ## Functionality analysis
+
+- `/`:
 
 At the first visit, the server grants us a cookie (based64 encoded) and the tech server uses is PHP 7.4.33.
 
