@@ -308,7 +308,7 @@ Then just brute-force the flag:
 </div>
 ```
 
-Gotchaaa first blood for Lunar New Year 2026 kkkk!!
+Gotchaaa first blood on second day of Lunar New Year 2026 kkkk!!
 
 ![flag leaked](assets/flag%20poc.png)
 ![flag decoded](assets/flag%20decode.png)
