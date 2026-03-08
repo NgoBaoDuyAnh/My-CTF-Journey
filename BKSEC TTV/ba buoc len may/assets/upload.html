@@ -1,0 +1,31 @@
+<?php
+session_start();
+
+if (isset($_SESSION["logged"])) {
+    $target_dir = "./user_submissions/";
+    $fileName = basename($_FILES["uploadFile"]["name"]);
+    $target_file = $target_dir . $fileName;
+
+    if (strpos($fileName, '.php') !== false) {
+        echo "Extension not allowed";
+        die();
+    }
+
+    if (!preg_match('/^.*\.(jpg|jpeg|png|gif)$/', $fileName)) {
+        echo "Only images are allowed";
+        die();
+    }
+
+    if ($_FILES["uploadFile"]["size"] > 500000) {
+        echo "File too large";
+        die();
+    }
+
+    if (move_uploaded_file($_FILES["uploadFile"]["tmp_name"], $target_file)) {
+        echo "File successfully uploaded";
+    } else {
+        echo "File failed to upload";
+    }
+} else {
+    echo "Only logged in users can upload files";
+}

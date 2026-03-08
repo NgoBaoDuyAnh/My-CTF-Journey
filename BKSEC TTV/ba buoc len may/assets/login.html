@@ -1,0 +1,75 @@
+<?php
+// redirect on direct access
+if (__FILE__ === realpath($_SERVER['SCRIPT_FILENAME'])) {
+    header('Location: index.php?page=login.php');
+}
+ 
+if (isset($_POST['username']) && isset($_POST['password'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    if (strpos($username, "'") !== false || strpos($username, '"') !== false ||
+        strpos($password, "'") !== false || strpos($password, '"') !== false) {
+        http_response_code(500);
+        die("Database Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '" . htmlspecialchars($username) . "' at line 1");
+    }
+    $error = "Invalid credentials";
+}
+
+if (isset($_POST['vip_code']) && !empty($_POST['vip_code'])) {
+    $code = $_POST['vip_code'];
+
+    if (strpos($code, "'") !== false || strpos($code, '"') !== false) {
+        http_response_code(500);
+        die("Database Error: You have an error in your SQL syntax near '" . htmlspecialchars($code) . "'");
+    }
+
+    // require_once('apply.php');
+
+    function validate_vip_code($code) {
+        $pattern = '/^CYBER2026-[A-Z]{3}[0-9]{4}[!@#$%][A-Z]{2}_[0-9]{6}$/';
+        return preg_match($pattern, $code) === 1;
+    }
+
+    if (validate_vip_code($code)) {
+        $_SESSION["logged"] = true;
+        echo '<script>window.location.href = "index.php?page=apply.php";</script>';
+        exit();
+    } else {
+        $error = "Invalid VIP access code format";
+    }
+}
+?>
+
+<div class="grid product">
+    <div class="column-xs-12 column-md-6" style="margin: 0 auto; float: none;">
+        <h1>Member Login</h1>
+        <div class="description">
+            <p>Existing members can login to access the application portal.</p>
+        </div>
+
+        <?php if (isset($error)): ?>
+            <div style="color: #ef4444; padding: 1rem; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 0.25rem; margin-bottom: 1rem;">
+                <?php echo $error; ?>
+            </div>
+        <?php endif; ?>
+
+        <form method="POST" action="/index.php?page=login.php">
+            <input type="text" class="form-control" name="username" placeholder="Username">
+            <input type="password" class="form-control" name="password" placeholder="Password">
+            <button type="submit" class="add-to-cart">Login</button>
+        </form>
+
+        <div style="margin: 1.5rem 0; text-align: center; color: #64748b;">
+            <small>- OR -</small>
+        </div>
+
+        <form method="POST" action="/index.php?page=login.php">
+            <input type="text" class="form-control" name="vip_code" placeholder="VIP Access Code">
+            <button type="submit" class="add-to-cart">Login</button>
+        </form>
+
+        <p style="margin-top: 2rem; color: #64748b;">
+            <small>Members can login with credentials or VIP access code.</small>
+        </p>
+    </div>
+</div>

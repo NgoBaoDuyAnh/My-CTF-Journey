@@ -1,0 +1,60 @@
+<?php
+if (__FILE__ === realpath($_SERVER['SCRIPT_FILENAME'])) {
+    header('Location: index.php?page=apply.php');
+}
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (!isset($_SESSION["logged"])) {
+    header('Location: index.php?page=login.php');
+    exit();
+}
+?>
+
+<div class="grid product">
+    <div class="column-xs-12 column-md-12">
+        <h1>Membership Application</h1>
+        <div class="description">
+            <p>Join CyberElite Security Club and become part of an exclusive network of cybersecurity professionals.</p>
+        </div>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="column-xs-12 column-md-6">
+        <h2>Application Requirements</h2>
+        <p>To apply for membership, please provide the following information:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-top: 20px;">
+            <li style="margin-bottom: 10px;">Full Name and Professional Title</li>
+            <li style="margin-bottom: 10px;">Professional Email Address</li>
+            <li style="margin-bottom: 10px;">LinkedIn Profile or Professional Portfolio</li>
+            <li style="margin-bottom: 10px;">Areas of Expertise and Interest</li>
+            <li style="margin-bottom: 10px;">Professional Headshot (JPG, PNG, or GIF format)</li>
+        </ul>
+        <p style="margin-top: 20px;">All applications are reviewed by our membership committee. You will receive a response within 5-7 business days.</p>
+    </div>
+    <div class="column-xs-12 column-md-6">
+        <h2>Submit Your Application</h2>
+        <form id="applicationForm" method="post">
+            <input type="text" class="form-control" name="fullname" placeholder="Full Name" required>
+            <input type="text" class="form-control" name="title" placeholder="Professional Title" required>
+            <input type="email" class="form-control" name="email" placeholder="Email Address" required>
+            <input type="url" class="form-control" name="linkedin" placeholder="LinkedIn Profile URL" required>
+            <textarea class="form-control" name="expertise" placeholder="Tell us about your cybersecurity expertise and interests..." rows="4" required></textarea>
+
+            <div style="margin-top: 20px; margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 10px; color: #333; font-weight: bold;">Professional Headshot</label>
+                <label for="uploadFile" style="cursor: pointer;">
+                    <img src="https://via.placeholder.com/150/2c3e50/ffffff?text=Upload+Photo" id="upload-image" class="upload-image" alt="Upload">
+                </label>
+                <input type="file" id="uploadFile" name="uploadFile" onchange="checkFile(this)" accept="image/*" required>
+            </div>
+
+            <div id="error_message" style="color: #d9534f; margin-bottom: 10px;"></div>
+
+            <button type="button" id="submit-upload" class="btn btn-primary" style="margin-right: 10px;">Upload Photo</button>
+            <button type="submit" id="submit-form" class="add-to-cart" disabled>Submit Application</button>
+        </form>
+    </div>
+</div>
