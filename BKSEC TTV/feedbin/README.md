@@ -33,9 +33,9 @@ def feed():
         return resp
 ```
 
-Khi mà server nhận param từ url `cat`, không filter nó mà gắn thẳng vào CSP header trả về và trả về với nội dung ban đầu cho người dùng.
+Khi mà server nhận param từ url `cat`, không filter nó mà gắn thẳng vào CSP header và trả về với nội dung ban đầu cho người dùng.
 
-Như vậy ta có thể để là `<script>alert()</script>;script-src 'unsafe-inline` nhưng vì cơ chế CSP, k viết đè được. Hỏi AI được gợi ý 
+Như vậy ta có thể để là `<script>alert()</script>;script-src 'unsafe-inline` . Sử dụng dấu `;` để ngắt CSP header ở đằng trước nhưng vì cơ chế CSP, k viết đè được. Hỏi AI được gợi ý 
 `script-src-elem 'unsafe-inline'`
 
 ![AI search](assets/AI%20search.png)
@@ -60,7 +60,7 @@ Một lúc sau confirm có request tới do có "headless chrome" là một con 
 ## Khai thác
 
 Vì flag chỉ được hiển thị ở trang của admin, nên em sẽ lừa bot truy cập `feed?cat=` với payload là gửi request tới `/admin/dashboard`.
-Do CSP `connect-src` là **self** nên gọi tới cùng orgin k bị chặn. Đọc request và gửi về webhook của em thông qua `location=`. Vì đây là **top-level-navigation** nên các CSP k chặn được.
+Do CSP `connect-src` là **self** nên gọi tới cùng origin k bị chặn. Đọc response trả về và gửi về webhook của em thông qua `location=`. Vì đây là **top-level-navigation** nên các CSP k chặn được.
 
 ![final payload](assets/payload.png)
 
