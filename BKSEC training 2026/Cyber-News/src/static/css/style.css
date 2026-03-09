@@ -1,0 +1,413 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Share+Tech+Mono&display=swap");
+
+:root {
+  --paper-bg: #f4f1ea;
+  --paper-texture: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZjRmMWVhIi8+CjxwYXRoIGQ9Ik0wIDBoNHY0SDB6IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuNCIvPjwvc3ZnPg==");
+  --ink: #1a1a1a;
+  --ink-light: #444;
+  --accent: #0088ff; /* Holographic Blue */
+  --accent-red: #cc0000;
+  --font-head: "Playfair Display", serif;
+  --font-body: "Share Tech Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #222; /* Outside the paper */
+  font-family: var(--font-body);
+  color: var(--ink);
+  line-height: 1.6;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* ══════ TICKER TAPE ══════ */
+.ticker-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  height: 30px;
+  background-color: var(--ink);
+  color: var(--paper-bg);
+  line-height: 30px;
+  z-index: 100;
+  border-bottom: 2px solid var(--accent);
+}
+.ticker {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker 30s linear infinite;
+  padding-left: 100%;
+}
+.ticker-item {
+  display: inline-block;
+  padding: 0 2rem;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+@keyframes ticker {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+/* ══════ PAPER CONTAINER ══════ */
+.paper-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  background-color: var(--paper-bg);
+  background-image: var(--paper-texture);
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+  border: 1px solid #d4d1ca;
+}
+
+/* ══════ HEADER ══════ */
+.main-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.date-line {
+  border-bottom: 1px solid var(--ink);
+  border-top: 1px solid var(--ink);
+  padding: 5px 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+.brand-title {
+  font-family: var(--font-head);
+  font-size: 4rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+}
+.separator-double {
+  border-top: 3px double var(--ink);
+  margin: 10px 0;
+}
+.separator-single {
+  border-top: 1px solid var(--ink);
+  margin: 10px 0;
+}
+
+/* ══════ NAVIGATION ══════ */
+.main-nav {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 10px 0;
+}
+.nav-link {
+  background: none;
+  border: none;
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+}
+.nav-link:hover,
+.nav-link.active {
+  color: var(--accent);
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  bottom: -2px;
+  left: 0;
+  transition: width 0.3s;
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+.nav-red {
+  color: var(--accent-red);
+}
+
+/* ══════ GRID SYSTEM ══════ */
+.content-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr 250px; /* Sidebar - Main - Sidebar */
+  gap: 40px;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 40px;
+  margin-bottom: 20px;
+}
+
+/* ══════ MAIN COLUMN Styles ══════ */
+.active-section {
+  display: block;
+} /* Toggle helpers */
+section {
+  display: none;
+} /* Hide by default, JS toggles style */
+section.active-section {
+  display: block;
+} /* Explicit override */
+
+/* Article Styles */
+.lead-story {
+  margin-bottom: 40px;
+}
+.lead-story .tag {
+  background: var(--ink);
+  color: #fff;
+  padding: 2px 6px;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.lead-story h2 {
+  font-family: var(--font-head);
+  font-size: 3rem;
+  line-height: 1;
+  margin: 10px 0;
+}
+.lead-story .meta {
+  font-style: italic;
+  color: var(--ink-light);
+  margin-bottom: 20px;
+  font-family: var(--font-head);
+}
+.article-body {
+  font-size: 1.1rem;
+  text-align: justify;
+}
+.drop-cap {
+  float: left;
+  font-family: var(--font-head);
+  font-size: 4rem;
+  line-height: 0.8;
+  padding-right: 8px;
+  padding-top: 4px;
+}
+
+/* Separators */
+.separator-dots {
+  text-align: center;
+  font-size: 24px;
+  letter-spacing: 10px;
+  margin: 30px 0;
+  color: var(--ink-light);
+}
+.separator-dots::after {
+  content: "•••";
+}
+
+/* Sub Stories */
+.sub-stories {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.sub-story h3 {
+  font-family: var(--font-head);
+  font-size: 1.2rem;
+  border-bottom: 1px solid var(--ink-light);
+  margin-bottom: 5px;
+}
+
+/* ══════ SIDEBARS ══════ */
+aside h3 {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.ad-box,
+.box-stats,
+.box-weather {
+  margin-bottom: 30px;
+  padding: 15px;
+  border: 1px dashed var(--ink-light);
+  background: rgba(0, 0, 0, 0.02);
+}
+.post-item-title {
+  font-family: var(--font-head);
+  font-weight: 700;
+  margin-bottom: 5px;
+  font-size: 1.1rem;
+}
+.post-item-content {
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+.post-item-meta {
+  font-size: 0.7rem;
+  color: #888;
+  border-top: 1px dotted #ccc;
+  padding-top: 5px;
+  margin-top: 5px;
+}
+.box-stats ul,
+.box-weather ul {
+  list-style: none;
+  padding: 0;
+}
+.box-stats li,
+.box-weather li {
+  margin-bottom: 5px;
+  border-bottom: 1px dotted #ccc;
+}
+
+/* ══════ FORMS (Sign up / Login / Post) ══════ */
+.form-wrapper {
+  max-width: 500px;
+  margin: 0 auto;
+  border: 2px solid var(--ink);
+  padding: 30px;
+  background: #fff;
+  box-shadow: 5px 5px 0 var(--ink-light);
+}
+.form-intro {
+  font-style: italic;
+  margin-bottom: 20px;
+  color: var(--ink-light);
+}
+label {
+  display: block;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 12px;
+  margin-top: 15px;
+}
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  background: #fff;
+  margin-top: 5px;
+}
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 5px rgba(0, 136, 255, 0.2);
+}
+.btn-ink {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-ink:hover {
+  background: var(--accent);
+}
+.btn-ink-small {
+  margin-top: 10px;
+  width: 100%;
+  padding: 8px;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  font-family: var(--font-head);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-ink-small:hover {
+  background: var(--accent);
+}
+
+/* ══════ DASHBOARD ══════ */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 4px double var(--ink);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+.user-badge {
+  background: var(--ink);
+  color: #fff;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+.dashboard-controls {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+}
+.tab-btn {
+  background: transparent;
+  border: 1px solid var(--ink);
+  padding: 8px 16px;
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+.tab-btn.active,
+.tab-btn:hover {
+  background: var(--ink);
+  color: #fff;
+}
+.two-col-dash {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+/* ══════ FOOTER ══════ */
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-light);
+  margin-top: 20px;
+}
+
+/* ══════ RESPONSIVE ══════ */
+@media (max-width: 900px) {
+  .content-grid {
+    display: block;
+  }
+  .col-left,
+  .col-right {
+    display: none; /* Hide sidebars on mobile for simplicity, or stack them */
+  }
+  .brand-title {
+    font-size: 2.5rem;
+  }
+}

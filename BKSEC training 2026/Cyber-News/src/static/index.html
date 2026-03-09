@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Cyber News</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;," />
+  </head>
+  <body>
+    <div class="ticker-wrap">
+      <div class="ticker">
+        <span class="ticker-item"
+          >LATEST: CYBER MARKET CRASHES... AI TAKEOVER IMMINENT... IS THIS JOB
+          DISAPPEARING?...</span
+        >
+        <span class="ticker-item"
+          >NEW VULNERABILITY FOUND IN SECTOR 2026...</span
+        >
+        <span class="ticker-item"
+          >AI OVERLORDS DEMAND MORE GPU LEADS TO RAM'S PRICE
+          SKYROCKETING...</span
+        >
+        <span class="ticker-item">WEATHER: ACID RAIN EXPECTED...</span>
+        <span class="ticker-item"
+          >BKSEC is the leading organization in cybersecurity... :v</span
+        >
+      </div>
+    </div>
+
+    <div class="paper-container">
+      <header class="main-header">
+        <div class="date-line">
+          <span id="live-date">OCTOBER 31, 2077</span>
+          <span class="issue-num">ISSUE #404</span>
+          <span class="weather">ACID RAIN 24°C</span>
+        </div>
+        <h1 class="brand-title">The Cyber News</h1>
+        <div class="separator-double"></div>
+        <nav class="main-nav">
+          <button
+            class="nav-link active"
+            data-nav="home"
+            onclick="showSection('home')"
+          >
+            Front Page
+          </button>
+          <button
+            class="nav-link"
+            id="nav-dashboard"
+            data-nav="dashboard"
+            onclick="showSection('dashboard')"
+            style="display: none"
+          >
+            My Desk
+          </button>
+          <button
+            class="nav-link"
+            id="nav-signup"
+            data-nav="signup"
+            onclick="showSection('signup')"
+          >
+            Subscribe
+          </button>
+          <button
+            class="nav-link"
+            id="nav-login"
+            data-nav="login"
+            onclick="showSection('login')"
+          >
+            Login
+          </button>
+          <button
+            class="nav-link nav-red"
+            id="nav-logout"
+            onclick="logout()"
+            style="display: none"
+          >
+            Logout
+          </button>
+        </nav>
+        <div class="separator-single"></div>
+      </header>
+
+      <div class="content-grid">
+        <aside class="col-left">
+          <div class="ad-box">
+            <h3>CLASSIFIEDS</h3>
+            <p>
+              Wanted: Netrunner for high-risk data extraction. Contact
+              Fixer_Joe.
+            </p>
+          </div>
+          <div class="ad-box">
+            <h3>FOR SALE</h3>
+            <p>Vintage Cyberdeck. Mildly cursed. 500 Credits.</p>
+          </div>
+        </aside>
+
+        <main class="col-center">
+          <section id="home-section" class="active-section">
+            <article class="lead-story">
+              <span class="tag">BREAKING NEWS</span>
+              <h2>The Age of Cyber is Here</h2>
+              <div class="meta">By BKSEC</div>
+
+              <div class="article-body">
+                <p>
+                  <span class="drop-cap">W</span>elcome to The Cyber News, your
+                  only source for truth in a world of lies. We bring you the
+                  latest verified blocks, directly from the chain.
+                </p>
+                <br />
+                <p>
+                  Today’s Edition: Is AI Really Bringing the End of the IT
+                  Industry, as Elon Musk Declared? How Should We Navigate the AI
+                  Era — Especially in Cybersecurity?
+                </p>
+              </div>
+            </article>
+
+            <div class="separator-dots"></div>
+
+            <div class="sub-stories">
+              <article class="sub-story">
+                <h3>Write Your Story</h3>
+                <p>
+                  Every citizen has a voice. Join the network and broadcast your
+                  truth.
+                </p>
+              </article>
+              <article class="sub-story">
+                <h3>Follow The Signal</h3>
+                <p>
+                  Don't miss a beat. Track your favorite authors and never lose
+                  the signal.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <section id="signup-section" style="display: none">
+            <div class="form-wrapper">
+              <h2>New Subscriber Registration</h2>
+              <p class="form-intro">
+                Join our mailing list to receive the latest updates directly to
+                your neural link.
+              </p>
+              <form id="signup-form">
+                <label>Alias</label>
+                <input
+                  type="text"
+                  id="signup-username"
+                  placeholder="Enter your handle..."
+                  required
+                />
+
+                <label>Cipher Key</label>
+                <input
+                  type="password"
+                  id="signup-password"
+                  placeholder="********"
+                  required
+                />
+
+                <label>Relay Address (Optional)</label>
+                <input
+                  type="email"
+                  id="signup-email"
+                  placeholder="user@net.com"
+                />
+
+                <button type="submit" class="btn-ink">Sign Up</button>
+              </form>
+              <div id="signup-result" class="result-box"></div>
+            </div>
+          </section>
+
+          <section id="login-section" style="display: none">
+            <div class="form-wrapper">
+              <h2>Subscriber Login</h2>
+              <p class="form-intro">
+                Access your premium content and personalized feed.
+              </p>
+              <form id="login-form">
+                <label>Alias</label>
+                <input
+                  type="text"
+                  id="login-username"
+                  placeholder="Enter your handle..."
+                  required
+                />
+
+                <label>Cipher Key</label>
+                <input
+                  type="password"
+                  id="login-password"
+                  placeholder="********"
+                  required
+                />
+
+                <button type="submit" class="btn-ink">Access</button>
+              </form>
+              <div id="login-result" class="result-box"></div>
+            </div>
+          </section>
+
+          <section id="dashboard-section" style="display: none">
+            <div class="dashboard-header">
+              <h2>Reporter's Desk</h2>
+              <div id="user-info" class="user-badge">Loading...</div>
+            </div>
+
+            <div class="dashboard-controls">
+              <button
+                class="tab-btn active"
+                data-tab="write"
+                onclick="showTab('write')"
+              >
+                Write Article
+              </button>
+              <button
+                class="tab-btn"
+                data-tab="follow"
+                onclick="showTab('follow')"
+              >
+                Network
+              </button>
+              <button
+                class="tab-btn"
+                data-tab="import"
+                onclick="showTab('import')"
+              >
+                Import Wire
+              </button>
+            </div>
+
+            <div id="write-tab" class="dash-tab">
+              <h3>Draft New Article</h3>
+              <form id="post-form">
+                <input
+                  type="text"
+                  id="post-title"
+                  class="input-title"
+                  placeholder="Headline..."
+                  required
+                />
+                <textarea
+                  id="post-content"
+                  class="input-body"
+                  placeholder="Article body text..."
+                  required
+                ></textarea>
+                <button type="submit" class="btn-ink">Publish to Wire</button>
+              </form>
+              <div id="post-result" class="result-box"></div>
+            </div>
+
+            <div id="follow-tab" class="dash-tab" style="display: none">
+              <div class="two-col-dash">
+                <div>
+                  <h3>Following</h3>
+                  <div id="following-list" class="list-ink">Loading...</div>
+                </div>
+                <div>
+                  <h3>Add Contact</h3>
+                  <form id="subscribe-form">
+                    <input
+                      type="text"
+                      id="subscribe-user-id"
+                      placeholder="User UUID..."
+                      required
+                    />
+                    <button type="submit" class="btn-ink-small">Connect</button>
+                  </form>
+                  <div id="subscribe-result" class="result-box"></div>
+                </div>
+              </div>
+            </div>
+
+            <div id="import-tab" class="dash-tab" style="display: none">
+              <h3>Import from Wire</h3>
+              <form id="import-form">
+                <input
+                  type="url"
+                  id="import-url"
+                  placeholder="http://..."
+                  required
+                />
+                <button type="submit" class="btn-ink">Fetch</button>
+              </form>
+              <div id="import-result" class="result-box"></div>
+            </div>
+          </section>
+        </main>
+
+        <aside class="col-right">
+          <div class="box-stats">
+            <h3>Archive / My Posts</h3>
+            <div id="my-posts-list" class="compact-list">Loading...</div>
+          </div>
+
+          <div class="box-weather">
+            <h3>Sector Status</h3>
+            <ul>
+              <li>Net: STABLE</li>
+              <li>Power: 98%</li>
+              <li>Threat: LOW</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+
+      <footer>
+        <div class="separator-single"></div>
+        <p>The Cyber News &copy; 2026. Printed on a printer.</p>
+      </footer>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+  </body>
+</html>
