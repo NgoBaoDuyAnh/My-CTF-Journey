@@ -1,0 +1,9 @@
+services:
+  web-low-eff-sns-2:
+    build:
+      context: .
+    ports:
+      - "8888:1337"
+    environment:
+      - ADMIN_PASSWORD=Abc@1234
+      - FLAG=BKSEC{REDACTED}

@@ -1,0 +1,445 @@
+basePath: /
+definitions:
+  handler.LoginData:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  handler.UpdateProfileData:
+    properties:
+      new_bio:
+        type: string
+      new_full_name:
+        type: string
+      new_password:
+        type: string
+      new_secret:
+        type: string
+    type: object
+  model.CreatePostReq:
+    properties:
+      content:
+        type: string
+      is_private:
+        description: need convert to true or something here
+        type: string
+      name:
+        type: string
+    type: object
+  model.PostResp:
+    properties:
+      content:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      owner:
+        type: string
+    type: object
+  model.ProfileResp:
+    properties:
+      bio:
+        type: string
+      full_name:
+        type: string
+      role:
+        type: string
+      username:
+        type: string
+    type: object
+  model.Secret:
+    properties:
+      owner:
+        type: string
+      secret:
+        type: string
+    type: object
+  model.User:
+    properties:
+      bio:
+        type: string
+      full_name:
+        type: string
+      password:
+        type: string
+      secret:
+        type: string
+      username:
+        type: string
+    type: object
+host: loweffsns2.bksec.vn
+info:
+  contact: {}
+  description: A social networking platform designed for developers and automation
+    enthusiasts. Connect, share, and interact through API-driven interactions.
+  title: API-SNS
+  version: 1.33.7
+paths:
+  /:
+    get:
+      description: Index - home page of this service.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Index
+      tags:
+      - General Usage
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user using their username and password. If the
+        credentials are correct, a JWT token is returned.
+      parameters:
+      - description: Username and Password
+        in: body
+        name: loginData
+        required: true
+        schema:
+          $ref: '#/definitions/handler.LoginData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful login
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request or missing fields
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Invalid username or password
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Authenticate user
+      tags:
+      - Authentication
+  /ping:
+    get:
+      description: Simple health check endpoint.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: HealthCheck
+      tags:
+      - General Usage
+  /posts:
+    get:
+      description: Retrieves all posts that are not marked as secret.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of public posts
+          schema:
+            items:
+              $ref: '#/definitions/model.PostResp'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all public posts
+      tags:
+      - Posts
+    post:
+      consumes:
+      - application/json
+      description: Allows an authenticated user to create a new post. The post can
+        be marked as private or public.
+      parameters:
+      - description: Post details
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreatePostReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Post successfully created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request or missing fields
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new post
+      tags:
+      - Posts
+  /posts/{id}:
+    get:
+      description: Fetches a post by its ID. If the post is private, only the owner
+        can access it.
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Post details
+          schema:
+            $ref: '#/definitions/model.PostResp'
+        "403":
+          description: 'Forbidden: Post is private'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a specific post
+      tags:
+      - Posts
+  /profile:
+    get:
+      description: Fetches the profile details of the currently logged-in user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User profile details
+          schema:
+            $ref: '#/definitions/model.ProfileResp'
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: View own profile
+      tags:
+      - Profile
+    put:
+      consumes:
+      - application/json
+      description: Updates the profile of the authenticated user. Fields that can
+        be updated include password, full name, bio, and secret.
+      parameters:
+      - description: Updated profile fields
+        in: body
+        name: updatedProfileReq
+        required: true
+        schema:
+          $ref: '#/definitions/handler.UpdateProfileData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Profile updated successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: No fields provided for update or invalid request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update profile
+      tags:
+      - Profile
+  /profile/{id}:
+    get:
+      description: Fetches the profile details of a specific user based on the provided
+        ID.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User profile details
+          schema:
+            $ref: '#/definitions/model.ProfileResp'
+        "404":
+          description: User does not exist
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: View another user's profile
+      tags:
+      - Profile
+  /protected:
+    get:
+      description: Returns a welcome message if the user has access to the protected
+        route.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Welcome message
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Test protected route
+      tags:
+      - Test
+  /secret:
+    get:
+      description: Fetches the secret associated with the currently logged-in user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User's secret
+          schema:
+            $ref: '#/definitions/model.Secret'
+        "404":
+          description: User does not have a secret
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: View own secret
+      tags:
+      - Secret
+  /secret/{id}:
+    get:
+      description: Fetches the secret associated with a specific user based on the
+        provided ID.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User's secret
+          schema:
+            $ref: '#/definitions/model.Secret'
+        "404":
+          description: User does not have a secret
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: View another user's secret
+      tags:
+      - Secret
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: Allows a user to register a new account.
+      parameters:
+      - description: User registration details
+        in: body
+        name: signupData
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User successfully registered
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid request or missing fields
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Register new account
+      tags:
+      - Authentication
+securityDefinitions:
+  JWT:
+    description: 'JWT Key for Authorization. Example: Authorization: Bearer XXXX'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

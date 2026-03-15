@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ĐẠI HỌC **** **** HÀ NỘI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-top">
+            <div class="header-container">
+                <div class="logo-section">
+                    <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="**** Logo" class="logo">
+                    <div class="logo-text">
+                        <h1>ĐẠI HỌC **** **** HÀ NỘI</h1>
+                        <p>HỆ THỐNG QUẢN TRỊ ĐẠI HỌC TRỰC TUYẾN</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="lang-btn">VI</button>
+                    <button class="login-btn" id="openLoginModal">ĐĂNG NHẬP</button>
+                </div>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <div class="header-container">
+                <ul class="nav-menu">
+                    <li><a href="/">TRANG CHỦ</a></li>
+                    <li><a href="#">GIẢNG VIÊN</a></li>
+                    <li><a href="#">SINH VIÊN</a></li>
+                    <li><a href="#">CÔNG THÔNG TIN</a></li>
+                    <li><a href="#">LIÊN HỆ VÀ PHẢN HỒI</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="hero-section">
+        <div class="hero-overlay"></div>
+    </div>
+
+    <!-- Login Modal Overlay -->
+    <div class="login-modal-overlay" id="loginModalOverlay">
+        <div class="container show">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flashes">
+                        {% for category, message in messages %}
+                            <li class="flash-{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <main class="main-content">
+        <!-- Main content area -->
+    </main>
+
+    <footer class="main-footer">
+        <div class="header-container">
+            <p>&copy; 2025 Đại học **** **** Hà Nội. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Login Modal Control
+        const openLoginBtn = document.getElementById('openLoginModal');
+        const loginModalOverlay = document.getElementById('loginModalOverlay');
+        
+        if (openLoginBtn) {
+            openLoginBtn.addEventListener('click', function() {
+                loginModalOverlay.classList.add('active');
+            });
+        }
+        
+        // Close modal when clicking outside the login card
+        loginModalOverlay.addEventListener('click', function(e) {
+            if (e.target === loginModalOverlay) {
+                loginModalOverlay.classList.remove('active');
+            }
+        });
+        
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && loginModalOverlay.classList.contains('active')) {
+                loginModalOverlay.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

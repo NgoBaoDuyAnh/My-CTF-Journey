@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: doubleS
+    ports:
+      - "5002:5002"
+    environment:
+      - MYSQL_HOST=localhost
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=rootpassword
+      - MYSQL_DB=prepared_db
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped

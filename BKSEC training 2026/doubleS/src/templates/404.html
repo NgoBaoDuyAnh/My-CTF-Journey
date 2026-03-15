@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - ĐẠI HỌC **** **** HÀ NỘI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-top">
+            <div class="header-container">
+                <div class="logo-section">
+                    <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="**** Logo" class="logo">
+                    <div class="logo-text">
+                        <h1>ĐẠI HỌC **** **** HÀ NỘI</h1>
+                        <p>HỆ THỐNG QUẢN TRỊ ĐẠI HỌC TRỰC TUYẾN</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="lang-btn">VI</button>
+                    <button class="login-btn" onclick="window.location.href='/'">ĐĂNG NHẬP</button>
+                </div>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <div class="header-container">
+                <ul class="nav-menu">
+                    <li><a href="/">TRANG CHỦ</a></li>
+                    <li><a href="#">GIẢNG VIÊN</a></li>
+                    <li><a href="#">SINH VIÊN</a></li>
+                    <li><a href="#">CÔNG THÔNG TIN</a></li>
+                    <li><a href="#">LIÊN HỆ VÀ PHẢN HỒI</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="hero-section">
+        <div class="hero-overlay"></div>
+        <main class="main-content">
+            <div class="container" style="display: block;">
+                <h2>404 Not Found</h2>
+                <p>The feature you are trying to access is currently not available.</p>
+            </div>
+        </main>
+    </div>
+
+    <footer class="main-footer">
+        <div class="header-container">
+            <p>&copy; 2025 Đại học **** **** Hà Nội. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
