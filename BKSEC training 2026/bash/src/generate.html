@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LINK_GEN // SHADOW_ARCHIVE</title>
+    <style>
+      :root {
+        --bg-color: #0a0a0a;
+        --text-color: #33ff00;
+        --dim-color: #1a8000;
+        --alert-color: #ff3300;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: "Courier New", Courier, monospace;
+        padding: 20px;
+        line-height: 1.4;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Scanlines */
+      body::after {
+        content: " ";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background:
+          linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+          linear-gradient(
+            90deg,
+            rgba(255, 0, 0, 0.06),
+            rgba(0, 255, 0, 0.02),
+            rgba(0, 0, 255, 0.06)
+          );
+        z-index: 2;
+        background-size:
+          100% 2px,
+          3px 100%;
+        pointer-events: none;
+      }
+
+      .terminal-window {
+        width: 100%;
+        max-width: 700px;
+        border: 2px solid var(--text-color);
+        padding: 0;
+        background: rgba(0, 20, 0, 0.9);
+        box-shadow: 10px 10px 0px #000;
+        position: relative;
+        z-index: 10;
+      }
+
+      .window-bar {
+        background: var(--text-color);
+        color: var(--bg-color);
+        padding: 5px 10px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .window-content {
+        padding: 30px;
+      }
+
+      h1 {
+        font-size: 1.5em;
+        margin-bottom: 30px;
+        border-bottom: 1px dashed var(--dim-color);
+        padding-bottom: 10px;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input,
+      select {
+        width: 100%;
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid var(--dim-color);
+        color: var(--text-color);
+        font-family: inherit;
+        font-size: 1.1em;
+        padding: 5px 0;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-bottom-color: var(--text-color);
+      }
+
+      /* Custom Select arrow hack for pure CSS look */
+      select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        cursor: pointer;
+      }
+
+      .helper-text {
+        font-size: 0.8em;
+        color: var(--dim-color);
+        margin-top: 5px;
+      }
+
+      .btn-Execute {
+        display: block;
+        width: 100%;
+        margin-top: 30px;
+        background: var(--text-color);
+        color: var(--bg-color);
+        border: none;
+        padding: 15px;
+        font-family: inherit;
+        font-weight: bold;
+        font-size: 1.2em;
+        cursor: pointer;
+        text-transform: uppercase;
+        animation: pulse 2s infinite;
+      }
+
+      .btn-Execute:hover {
+        background: #fff;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.8;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .output-console {
+        margin-top: 20px;
+        border: 1px solid var(--text-color);
+        padding: 15px;
+        display: none;
+      }
+
+      .output-console.visible {
+        display: block;
+      }
+
+      .result-link {
+        word-break: break-all;
+        color: yellow;
+      }
+
+      .back-btn {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: var(--dim-color);
+        text-decoration: none;
+      }
+
+      .back-btn:hover {
+        color: var(--text-color);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="terminal-window">
+      <div class="window-bar">
+        <span>EXECUTABLE: LINK_GEN.EXE</span>
+        <span>[X]</span>
+      </div>
+      <div class="window-content">
+        <a href="/" class="back-btn">&lt; RETURN_TO_ROOT</a>
+
+        <h1>> CONFIGURE_DOWNLOAD_PARAMETERS</h1>
+
+        <form id="linkGenForm">
+          <div class="form-group">
+            <label>> SELECT_ENCRYPTION_KEY [ki]</label>
+            <select id="keyIndex">
+              <option value="1">KEY_SLOT_01 [RSA]</option>
+              <option value="2">KEY_SLOT_02 [DSA]</option>
+              <option value="3" selected>KEY_SLOT_03 [ECDSA]</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>> TIME_BEGIN_TIMESTAMP [tb]</label>
+            <input type="text" id="timeBegin" value="1000000000" />
+            <div class="helper-text">// FORMAT: UNIX_EPOCH (10 DIGITS)</div>
+          </div>
+
+          <div class="form-group">
+            <label>> TIME_END_TIMESTAMP [te]</label>
+            <input type="text" id="timeEnd" value="9999999999" />
+            <div class="helper-text">// FORMAT: UNIX_EPOCH (10 DIGITS)</div>
+          </div>
+
+          <div class="form-group">
+            <label>> CRYPTOGRAPHIC_SIGNATURE [sg]</label>
+            <input
+              type="text"
+              id="signature"
+              value="auth_token_bypass_attempt"
+            />
+            <div class="helper-text">// HASH_VERIFICATION_STRING</div>
+          </div>
+
+          <div class="form-group">
+            <label>> TARGET_FILE_ARTIFACT</label>
+            <select id="filename">
+              <option value="8f3a9b2c-4d1e-4a5f-9c8b-7e6d5a4b3c2d.pdf">
+                CONFIDENTIAL_REPORT_2024.pdf
+              </option>
+              <option value="1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d.zip">
+                BLUEPRINTS.zip
+              </option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-Execute">
+            [ INITIATE_GENERATION_SEQUENCE ]
+          </button>
+        </form>
+
+        <div id="consoleOutput" class="output-console">
+          <p>> PROCESSING...</p>
+          <p>> VALIDATING SIGNATURE... [BYPASSED]</p>
+          <p>> GENERATING LINK...</p>
+          <br />
+          <div id="finalLink" class="result-link"></div>
+          <br />
+          <button
+            onclick="copyToClipboard()"
+            style="
+              background: none;
+              border: 1px solid yellow;
+              color: yellow;
+              padding: 5px;
+              cursor: pointer;
+            "
+          >
+            [ COPY_TO_MEMORY ]
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("linkGenForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const ki = document.getElementById("keyIndex").value;
+          const tb = document.getElementById("timeBegin").value;
+          const te = document.getElementById("timeEnd").value;
+          const sg = document.getElementById("signature").value;
+          const filename = document.getElementById("filename").value;
+
+          // Generate link logic
+          const params = `ki=${ki},tb=${tb},te=${te},sg=${sg}`;
+          const fullLink = `${window.location.origin}/dl/v1/${ki}/s:${params}/${filename}`;
+
+          const consoleOut = document.getElementById("consoleOutput");
+          const linkDiv = document.getElementById("finalLink");
+
+          consoleOut.classList.add("visible");
+          linkDiv.textContent = fullLink;
+        });
+
+      function copyToClipboard() {
+        const text = document.getElementById("finalLink").textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          alert("> DATA COPIED TO BUFFER.");
+        });
+      }
+    </script>
+  </body>
+</html>
