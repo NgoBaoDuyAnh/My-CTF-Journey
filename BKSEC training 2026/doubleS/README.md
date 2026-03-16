@@ -327,3 +327,9 @@ Nhớ viết file .C và compile ra file .so trước khi chạy PoC trên.
 Một chuỗi đi từ lách luật Web -> Chọc ngoáy Database -> Ghi file Hệ điều hành -> Kích nổ ở tầng Memory -> Ép văng lỗi để lấy data.
 
 > Disclaimer: Phần tổng hợp kĩ thuật này mình nhờ AI đọc PoC rồi gen ra các ý.
+
+## References
+
+1) [__attribute__((constructor))](https://stackoverflow.com/questions/2053029/how-exactly-does-attribute-constructor-work)
+2) [ctypes source code](https://github.com/python/cpython/blob/main/Lib/ctypes/__init__.py)
+3) [ctypes docs](https://docs.python.org/3/library/ctypes.html#loading-dynamic-link-libraries)
