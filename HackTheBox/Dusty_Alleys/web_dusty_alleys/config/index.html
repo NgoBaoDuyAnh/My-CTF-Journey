@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Underground Labyrinth</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: #111;
+            color: #ccc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #ffa500;
+            text-shadow: 0px 0px 10px #ff8c00;
+        }
+
+        p {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: #bbb;
+        }
+
+        .robot {
+            margin: 2rem auto;
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .robot::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: url('evil-robot.jpg') no-repeat center center/contain;
+            transform: translate(-50%, -50%);
+            filter: brightness(0.6) contrast(1.2);
+        }
+
+
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 25px 15px rgba(255, 215, 0, 0.5);
+            }
+
+            100% {
+                box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.2);
+            }
+        }
+
+        .buttons {
+            margin-top: 1.5rem;
+        }
+
+        .button {
+            font-size: 1rem;
+            padding: 10px 20px;
+            color: #fff;
+            background: #444;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .button:hover {
+            background: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>The Underground Labyrinth</h1>
+        <p>As the survivors venture deeper into the underground labyrinth, the oppressive darkness envelops them, and
+            the air grows thick with dust and decay. The maze-like passages twist and turn, confounding their senses and
+            sapping their resolve.</p>
+        <p>Just as hope begins to wane and despair threatens to take hold, a faint glimmer of light catches their
+            attention. Through the gloom, they spot a small, dilapidated robot, its metal frame battered and rusted from
+            years of neglect. It emits feeble sparks, its circuits struggling to maintain functionality. So they decided
+            to get the answers from him.</p>
+        <div class="robot">
+        </div>
+        <div class="buttons">
+            <button class="button">Interact with the Robot</button>
+        </div>
+    </div>
+</body>
+
+</html>

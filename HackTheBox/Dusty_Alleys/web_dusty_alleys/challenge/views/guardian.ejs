@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dusty Alleys - The Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #8B4513;
+            color: #FFFF00;
+            font-family: 'VT323', monospace !important;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #000000;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+
+        .button {
+            background-color: #000000;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .error {
+            color: red;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Dusty Alleys - The Game</h1>
+        <h2>Where is the key?</h2>
+        <% if (locals.error) { %>
+            <p class="error">
+                <%= locals.error %>
+            </p>
+            <% } %>
+                <form action="" method="get">
+                    <div style="display: flex;align-items: center;justify-content: center;">
+                        <img src="guardian.jpg" width="600px">
+                    </div>
+                    <input type="text" name="quote" placeholder="Enter the location of the key">
+                    <button type="submit" class="button">Submit</button>
+                </form>
+    </div>
+</body>
+
+</html>

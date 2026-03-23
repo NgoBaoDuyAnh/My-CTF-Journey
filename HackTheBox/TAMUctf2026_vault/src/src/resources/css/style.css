@@ -1,0 +1,191 @@
+body {
+    background-color: #1f2136;
+    color: white;
+
+    display: flex;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+a {
+    color: blue;
+    cursor: pointer;
+}
+
+button {
+    cursor: pointer;
+}
+
+.title {
+    position: relative;
+    text-align: center;
+    padding: 1rem;
+
+    h1 {
+        margin-bottom: 1rem;
+    }
+
+    h2 {
+        margin-bottom: 0.25rem;
+    }
+}
+
+.no-account {
+    margin-top: 2rem;
+}
+
+.content-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    text-align: center;
+    margin: auto;
+    width: 50rem;
+    padding: 1rem;
+
+    background: rgba(26, 26, 26, 0.9);
+    border: 3px solid #ff00ff;
+    border-radius: 4px;
+
+    box-shadow:
+        0 0 2px #ff00ff inset,
+        0 0 8px #ff00ff;
+
+    h2 {
+        padding-bottom: 1rem;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    input, button {
+        width: 25rem;
+        height: 2.5rem;
+        margin: auto;
+        margin-bottom: 0.8rem;
+
+        border: 3px solid #ff00ff;
+        background-color: #2b0040;
+        border-radius: 4px;
+        color: white;
+        outline: none;
+    }
+
+    p {
+        padding: 1rem;
+    }
+
+    .submit {
+        margin-top: 1rem;
+        cursor: pointer;
+    }
+
+    .errors {
+        margin-top: 1rem;
+        color: red;
+        list-style: none;
+    }
+}
+
+.options {
+    display: grid;
+    margin: auto;
+    text-align: center;
+
+    grid-template-columns: auto auto;
+
+    .option {
+        color: white;
+        background: rgba(26, 26, 26, 0.9);
+        border: 3px solid #ff00ff;
+        box-shadow:
+            0 0 2px #ff00ff inset,
+            0 0 8px #ff00ff;
+
+        width: 25rem;
+        height: 10rem;
+        margin: 1rem;
+
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        cursor: pointer;
+    }
+}
+
+.logout {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    
+    input {
+        cursor: pointer;
+        background: rgba(26, 26, 26, 0.9);
+        box-shadow:
+            0 0 2px #ff00ff inset,
+            0 0 8px #ff00ff;
+
+        color: red;
+        width: 10rem;
+        height: 3rem;
+    }
+}
+
+.back-dashboard {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    padding: 0.75rem;
+    margin: 1rem auto 1rem auto;
+    width: 12rem;
+
+    color: white;
+    background: rgba(26, 26, 26, 0.9);
+    box-shadow:
+        0 0 2px #ff00ff inset,
+        0 0 8px #ff00ff;
+}
+
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.account-info {
+    display: flex;
+    flex-direction: column;
+
+    width: 50rem;
+    margin: auto;
+}
+
+.account-uuid {
+    text-align: center;
+    width: 35rem !important;
+    cursor: text;
+}
+
+.transaction-table {
+    border-spacing: 0 1rem;
+}
+
+.secret-table {
+    border-spacing: 0 1rem;
+
+    input {
+        cursor: pointer;
+        margin: 0;
+        width: 3rem;
+        color: red;
+    }
+}
+
+.voucher {
+    overflow-wrap: break-word;
+}
