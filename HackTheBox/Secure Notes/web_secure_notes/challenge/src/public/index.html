@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SecNotes - Secure Note Taking</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">SecNotes</h1>
+                <p class="tagline">Your secure vault</p>
+            </div>
+            <button class="new-note-btn" id="newNoteBtn">+ New Note</button>
+            <div class="notes-list" id="notesList">
+            </div>
+            <div class="sidebar-footer">
+                <span class="note-count" id="noteCount">0 notes</span>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">📝</div>
+                <h2>No Note Selected</h2>
+                <p>Select a note from the sidebar or create a new one</p>
+            </div>
+
+            <div class="note-editor" id="noteEditor" style="display: none;">
+                <div class="editor-toolbar">
+                    <div class="editor-actions">
+                        <button class="btn btn-save" id="saveBtn" title="Save Note">💾 Save</button>
+                        <button class="btn btn-delete" id="deleteBtn" title="Delete Note">🗑️ Delete</button>
+                    </div>
+                </div>
+                <input type="text" id="noteTitle" class="note-title-input" placeholder="Note Title...">
+                <div class="editor-meta" id="editorMeta">
+                    <span class="meta-item" id="createdAt"></span>
+                    <span class="meta-item" id="updatedAt"></span>
+                </div>
+                <textarea id="noteContent" class="note-content-input"
+                    placeholder="Start writing your note..."></textarea>
+            </div>
+
+            <div class="new-note-form" id="newNoteForm" style="display: none;">
+                <h2 class="form-title">Create New Note</h2>
+                <input type="text" id="newTitle" class="note-title-input" placeholder="Enter note title...">
+                <textarea id="newContent" class="note-content-input"
+                    placeholder="Write your note content here..."></textarea>
+                <div class="form-actions">
+                    <button class="btn btn-cancel" id="cancelBtn">Cancel</button>
+                    <button class="btn btn-create" id="createBtn">Create Note</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let notes = JSON.parse(localStorage.getItem('notes') || '[]');
+        let currentNoteId = null;
+
+        const notesList = document.getElementById('notesList');
+        const emptyState = document.getElementById('emptyState');
+        const noteEditor = document.getElementById('noteEditor');
+        const newNoteForm = document.getElementById('newNoteForm');
+        const noteCount = document.getElementById('noteCount');
+        const toast = document.getElementById('toast');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderNotesList();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('newNoteBtn').addEventListener('click', showNewNoteForm);
+            document.getElementById('createBtn').addEventListener('click', createNote);
+            document.getElementById('cancelBtn').addEventListener('click', hideNewNoteForm);
+            document.getElementById('saveBtn').addEventListener('click', saveNote);
+            document.getElementById('deleteBtn').addEventListener('click', deleteNote);
+        }
+
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.className = `toast show ${type}`;
+            setTimeout(() => toast.className = 'toast', 3000);
+        }
+
+        function renderNotesList() {
+            notesList.innerHTML = '';
+            notes.forEach(note => {
+                const noteItem = document.createElement('div');
+                noteItem.className = `note-item ${note._id === currentNoteId ? 'active' : ''}`;
+                noteItem.dataset.id = note._id;
+                noteItem.innerHTML = `
+                <div class="note-item-title">${escapeHtml(note.title) || 'Untitled'}</div>
+                <div class="note-item-preview">${escapeHtml(note.content?.substring(0, 50)) || 'No content'}...</div>
+                <div class="note-item-date">${formatDate(note.updatedAt || note.createdAt)}</div>
+            `;
+                noteItem.addEventListener('click', () => selectNote(note._id));
+                notesList.appendChild(noteItem);
+            });
+            noteCount.textContent = `${notes.length} note${notes.length !== 1 ? 's' : ''}`;
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function showNewNoteForm() {
+            currentNoteId = null;
+            emptyState.style.display = 'none';
+            noteEditor.style.display = 'none';
+            newNoteForm.style.display = 'block';
+            document.getElementById('newTitle').value = '';
+            document.getElementById('newContent').value = '';
+            document.getElementById('newTitle').focus();
+            renderNotesList();
+        }
+
+        function hideNewNoteForm() {
+            newNoteForm.style.display = 'none';
+            if (currentNoteId) {
+                noteEditor.style.display = 'block';
+            } else {
+                emptyState.style.display = 'flex';
+            }
+        }
+
+        function createNote() {
+            const title = document.getElementById('newTitle').value.trim();
+            const content = document.getElementById('newContent').value.trim();
+
+            if (!title) {
+                showToast('Please enter a title', 'error');
+                return;
+            }
+
+            fetch('/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, content })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data._id) {
+                        const newNote = {
+                            _id: data._id,
+                            title: data.title,
+                            content: data.content,
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
+                        };
+                        notes.unshift(newNote);
+                        localStorage.setItem('notes', JSON.stringify(notes));
+                        showToast('Note created successfully!');
+                        selectNote(data._id);
+                    } else {
+                        showToast('Failed to create note', 'error');
+                    }
+                })
+                .catch(error => {
+                    showToast('An error occurred', 'error');
+                    console.error(error);
+                });
+        }
+
+        function selectNote(noteId) {
+            currentNoteId = noteId;
+            const note = notes.find(n => n._id === noteId);
+
+            if (!note) {
+                showToast('Note not found', 'error');
+                return;
+            }
+
+            // Fetch latest from server
+            fetch(`/get/${noteId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data._id) {
+                        document.getElementById('noteTitle').value = data.title || '';
+                        document.getElementById('noteContent').value = data.content || '';
+                        document.getElementById('createdAt').textContent = note.createdAt ? `Created: ${formatDate(note.createdAt)}` : '';
+                        document.getElementById('updatedAt').textContent = note.updatedAt ? `Updated: ${formatDate(note.updatedAt)}` : '';
+
+                        emptyState.style.display = 'none';
+                        newNoteForm.style.display = 'none';
+                        noteEditor.style.display = 'block';
+                        renderNotesList();
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                    // Fallback to local data
+                    document.getElementById('noteTitle').value = note.title || '';
+                    document.getElementById('noteContent').value = note.content || '';
+                    emptyState.style.display = 'none';
+                    newNoteForm.style.display = 'none';
+                    noteEditor.style.display = 'block';
+                    renderNotesList();
+                });
+        }
+
+        function saveNote() {
+            if (!currentNoteId) return;
+
+            const title = document.getElementById('noteTitle').value.trim();
+            const content = document.getElementById('noteContent').value.trim();
+
+            fetch('/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ noteId: currentNoteId, title, content })
+            })
+                .then(response => response.json())
+                .then(_ => {
+                    const noteIndex = notes.findIndex(n => n._id === currentNoteId);
+                    if (noteIndex !== -1) {
+                        notes[noteIndex].title = title;
+                        notes[noteIndex].content = content;
+                        notes[noteIndex].updatedAt = new Date().toISOString();
+                        localStorage.setItem('notes', JSON.stringify(notes));
+                        document.getElementById('updatedAt').textContent = `Updated: ${formatDate(notes[noteIndex].updatedAt)}`;
+                    }
+                    showToast('Note saved successfully!');
+                    renderNotesList();
+                })
+                .catch(error => {
+                    showToast('Failed to save note', 'error');
+                    console.error(error);
+                });
+        }
+
+        function deleteNote() {
+            if (!currentNoteId) return;
+
+            if (!confirm('Are you sure you want to delete this note?')) return;
+
+            notes = notes.filter(n => n._id !== currentNoteId);
+            localStorage.setItem('notes', JSON.stringify(notes));
+
+            currentNoteId = null;
+            noteEditor.style.display = 'none';
+            emptyState.style.display = 'flex';
+            showToast('Note deleted');
+            renderNotesList();
+        }
+
+    </script>
+
+</body>
+
+</html>

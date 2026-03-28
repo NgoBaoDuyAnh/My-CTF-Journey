@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SecNotes - Edit Note</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">SecNotes</h1>
+                <p class="tagline">Your secure vault</p>
+            </div>
+            <a href="/" class="new-note-btn" style="text-decoration: none; text-align: center;">← Back to Notes</a>
+            <div class="sidebar-footer" style="margin-top: auto;">
+                <span class="note-count">Quick Edit Mode</span>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="note-editor" id="noteEditor">
+                <div class="editor-header">
+                    <input type="text" id="noteTitle" name="title" class="note-title-input" placeholder="Note Title...">
+                    <div class="editor-actions">
+                        <button class="btn btn-save" id="saveBtn" title="Save Note">💾 Save</button>
+                        <a href="/" class="btn btn-cancel" style="text-decoration: none;">Cancel</a>
+                    </div>
+                </div>
+                <div class="editor-meta" id="editorMeta">
+                    <span class="meta-item">Editing note...</span>
+                </div>
+                <textarea id="noteContent" name="content" class="note-content-input"
+                    placeholder="Write your note content here..."></textarea>
+            </div>
+        </main>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        if (!localStorage.getItem("noteId")) {
+            location.href = "/";
+        }
+
+        const toast = document.getElementById('toast');
+
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.className = `toast show ${type}`;
+            setTimeout(() => toast.className = 'toast', 3000);
+        }
+
+        document.getElementById("saveBtn").addEventListener("click", function () {
+            let title = document.getElementById("noteTitle").value;
+            let content = document.getElementById("noteContent").value;
+            let noteId = localStorage.getItem("noteId");
+
+            fetch("/update", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title: title, content: content, noteId: noteId })
+            }).then(response => response.json()).then(_ => {
+                showToast("Note updated successfully!");
+                // Update local storage notes list if it exists
+                let notes = JSON.parse(localStorage.getItem('notes') || '[]');
+                const noteIndex = notes.findIndex(n => n._id === noteId);
+                if (noteIndex !== -1) {
+                    notes[noteIndex].title = title;
+                    notes[noteIndex].content = content;
+                    notes[noteIndex].updatedAt = new Date().toISOString();
+                    localStorage.setItem('notes', JSON.stringify(notes));
+                }
+            }).catch(error => {
+                showToast("An error occurred while updating the note", "error");
+                console.error(error);
+            });
+        });
+
+        window.onload = function () {
+            let noteId = localStorage.getItem("noteId");
+            fetch(`/get/${noteId}`).then(response => response.json()).then(data => {
+                document.getElementById("noteTitle").value = data.title || '';
+                document.getElementById("noteContent").value = data.content || '';
+            }).catch(error => {
+                showToast("An error occurred while loading the note", "error");
+                console.error(error);
+            });
+        };
+    </script>
+</body>
+
+</html>
